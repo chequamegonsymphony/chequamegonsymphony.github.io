@@ -1,0 +1,22 @@
+{
+  "name": "Chequamegon Symphony Orchestra",
+  "shortName": "CSO",
+  "tagline": "A community civic orchestra in Ashland, Wisconsin, since 1965",
+  "email": "chequamegonsymphony@gmail.com",
+  "facebook": "https://www.facebook.com/chequamegonsymphony",
+  "donations": {
+    "intro": "To help support the Chequamegon Symphony, donations may be sent to:",
+    "payee": "CSO Treasurer",
+    "address": ["1119 Ellis Ave.", "Ashland, WI 54806"]
+  },
+  "reminderForm": {
+    "intro": "If you would like to receive email reminders of our concerts, please sign up here.",
+    "url": "TODO-replace-with-Google-Form-or-Formspree-URL",
+    "buttonText": "Sign up for concert reminders"
+  },
+  "sponsors": [
+    { "name": "Wisconsin Public Radio", "image": "/images/sponsor-wpr.png", "url": "https://www.wpr.org" },
+    { "name": "Northern State Bank", "image": "/images/sponsor-northern-state-bank.jpg" },
+    { "name": "Ringenberg", "image": "/images/sponsor-ringenberg.jpg" }
+  ]
+}

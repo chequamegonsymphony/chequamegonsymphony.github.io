@@ -1,0 +1,72 @@
+---
+import '../styles/global.css';
+import site from '../data/site.json';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = site.tagline } = Astro.props;
+const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
+
+const nav = [
+  { href: '/', label: 'Home' },
+  { href: '/our-director', label: 'Our Director' },
+  { href: '/concert-series', label: 'Concert Series' },
+  { href: '/contact', label: 'Contact Us' },
+];
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} — {site.name}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <meta property="og:title" content={`${title} — ${site.name}`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">{site.name}</a>
+        <nav aria-label="Main">
+          <ul class="site-nav">
+            {nav.map((item) => (
+              <li><a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <slot />
+    </main>
+
+    <section class="sponsors wrap" aria-label="Sponsors">
+      <h2>With thanks to our sponsors</h2>
+      <ul>
+        {site.sponsors.map((s) => (
+          <li>
+            {s.url
+              ? <a href={s.url} rel="noopener"><img src={s.image} alt={s.name} loading="lazy" /></a>
+              : <img src={s.image} alt={s.name} loading="lazy" />}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>© {year} {site.name}. A 501(c)(3) non-profit organization.</p>
+        <p><a href={`mailto:${site.email}`}>{site.email}</a> · <a href={site.facebook} rel="noopener">Facebook</a></p>
+      </div>
+    </footer>
+  </body>
+</html>

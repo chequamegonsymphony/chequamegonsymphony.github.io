@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import season from '../data/season.json';
+
+// The season lives in src/data/season.json — one file to edit when programs change.
+// Concerts are shown in the order they appear there.
+---
+<Base title={season.seasonTitle} description={`${season.seasonTitle}: ${season.concerts.map((c) => c.title).join(', ')}`}>
+  <figure class="hero">
+    <img src="/images/cellist-northland.jpg" alt="A cellist performing with the Chequamegon Symphony Orchestra" width="1200" height="400" />
+  </figure>
+  <h1>{season.seasonTitle}{season.seasonTheme && <> — <em>{season.seasonTheme}</em></>}</h1>
+
+  {season.concerts.map((c) => (
+    <article class="concert">
+      <h2>{c.name}: {c.title}</h2>
+      <p class="when"><time datetime={c.date}>{c.dateDisplay}</time>, {c.time}</p>
+      <p class="venue">{c.venue}</p>
+      <ul class="program">
+        {c.program.map((p) => (
+          <li><span class="work">{p.work}</span><span class="composer">{p.composer}</span></li>
+        ))}
+      </ul>
+    </article>
+  ))}
+</Base>

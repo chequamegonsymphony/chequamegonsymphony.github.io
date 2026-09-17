@@ -1,0 +1,7 @@
+[33m[1m14:31:40[22m [WARN][39m Missing pages directory: src/pages
+[preview] The output directory C:\tmp\cso-website\public\images\dist\ does not exist. Did you run `astro build`?
+  [1mLocation:[22m
+    [4mC:\tmp\cso-website\node_modules\astro\dist\core\preview\index.js:33:13[24m
+  [1mStack trace:[22m
+[2m    at preview (file:///C:/tmp/cso-website/node_modules/astro/dist/core/preview/index.js:33:13)
+    at async runCommand (file:///C:/tmp/cso-website/node_modules/astro/dist/cli/index.js:215:22)[22m

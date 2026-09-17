@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import site from '../data/site.json';
+---
+<Base title="Contact Us">
+  <h1>Contact Us</h1>
+  <div class="contact-grid">
+    <div class="prose">
+      <p>For more information about the Chequamegon Symphony, contact us at
+        <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+
+      <h2>Support the orchestra</h2>
+      <p>{site.donations.intro}</p>
+      <address class="address">
+        <strong>{site.donations.payee}</strong><br />
+        {site.donations.address.map((line) => <>{line}<br /></>)}
+      </address>
+
+      <h2>Concert reminders</h2>
+      <p>{site.reminderForm.intro}</p>
+      <p><a class="button" href={site.reminderForm.url} rel="noopener">{site.reminderForm.buttonText}</a></p>
+    </div>
+    <figure>
+      <img src="/images/contact.jpg" alt="Chequamegon Symphony Orchestra" loading="lazy" />
+    </figure>
+  </div>
+</Base>

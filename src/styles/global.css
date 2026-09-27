@@ -4,6 +4,8 @@
 :root {
   --accent: #e8912d;
   --accent-dark: #c9741a;
+  --accent-text: #a85a10;  /* orange dark enough for small text on white (~5:1) */
+  --program: #24678d;      /* the old site's program blue */
   --ink: #2b2b2b;
   --ink-soft: #5a5a5a;
   --rule: #e6e6e6;
@@ -60,15 +62,17 @@ main h2 { font-family: var(--serif); font-weight: normal; font-size: 1.5rem; mar
 .portrait { margin: 0; border-radius: 4px; overflow: hidden; }
 .director .prose :is(h1, h2):first-child { margin-top: 0; }
 
-/* Concerts */
-.concert { padding: 1.5rem 0; border-top: 1px solid var(--rule); }
+/* Concerts — laid out like a printed program: centred, orange says when and where,
+   blue says what. The rest of the site stays left-aligned for easy reading. */
+.season-title { text-align: center; }
+.concert { padding: 1.75rem 0; border-top: 1px solid var(--rule); text-align: center; }
 .concert:first-of-type { border-top: 0; }
-.concert h2 { margin-top: 0; }
-.concert .when { color: var(--ink-soft); margin: 0 0 0.25rem; }
-.concert .venue { color: var(--ink-soft); margin: 0 0 1rem; }
-.program { list-style: none; margin: 0; padding: 0; }
-.program li { padding: 0.2rem 0; }
-.program .composer { color: var(--ink-soft); }
+.concert h2 { margin: 0 0 0.25rem; color: var(--accent-dark); }
+.concert .when, .concert .venue { color: var(--accent-text); margin: 0; }
+.concert .when { font-weight: 600; }
+.concert h3 { font-family: var(--serif); font-weight: 600; font-size: 1.3rem; color: var(--program); margin: 1.25rem 0 0.5rem; }
+.program { list-style: none; margin: 0; padding: 0; color: var(--program); }
+.program li { padding: 0.15rem 0; }
 .program .composer::before { content: " — "; }
 
 /* Contact */

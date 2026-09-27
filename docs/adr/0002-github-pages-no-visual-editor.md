@@ -5,7 +5,7 @@
 | **Status** | Accepted |
 | **Date** | 2026-09-27 |
 | **Author** | Adam Zeuske, Webmaster |
-| **Deciders** | Webmaster, under the board's 2026-09-23 mandate ("fix it in whatever manner you see fit") |
+| **Deciders** | Webmaster, under the board's 2026-09-23 mandate ("fix it in whatever manner you see fit"). Confirmed with the board (via Kristin) 2026-09-27: the webmaster is also the content manager for the foreseeable future. |
 | **Supersedes** | The hosting choice (Option A, Cloudflare Pages) and the visual-editor assumption in [ADR-0001](0001-static-site-hosting-platform.md) |
 
 ---

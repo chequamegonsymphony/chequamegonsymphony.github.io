@@ -10,6 +10,9 @@ node_modules/
 .env.*
 !.env.example
 
+# webmaster's local credential notes — never committed (this repo is public)
+.secrets.local
+
 # OS / editor
 .DS_Store
 Thumbs.db

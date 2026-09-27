@@ -1,12 +1,22 @@
-# Build check on every pull request and push. Deployment is NOT done here —
-# Cloudflare Pages is connected directly to the repository and builds `main` itself.
-# This workflow exists so a broken change is caught in the PR, before it reaches main.
+# Build on every pull request; build AND publish to GitHub Pages on every push to main.
+# This workflow is the whole deployment pipeline — nothing else publishes the site.
+# A broken change fails here, in the PR, before it reaches main.
 name: build
 
 on:
   pull_request:
   push:
     branches: [main]
+  workflow_dispatch: # "Run workflow" button, to republish by hand
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -20,3 +30,18 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request'
+        with:
+          path: dist
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

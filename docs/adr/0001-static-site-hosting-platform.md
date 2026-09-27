@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Proposed — awaiting board decision |
+| **Status** | Accepted by the board 2026-09-23 · **Hosting choice superseded by [ADR-0002](0002-github-pages-no-visual-editor.md) (2026-09-27)** |
 | **Date** | 2026-09-16 |
 | **Author** | Adam Zeuske, Webmaster |
 | **Deciders** | CSO Board of Directors |

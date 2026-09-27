@@ -7,9 +7,9 @@ future maintainer doesn't have to reverse-engineer a stranger's choices.
 ## What this is
 
 A four-page static website for a community orchestra in Ashland, Wisconsin. Astro 5,
-static output, no client-side framework, one CSS file. Hosted on Cloudflare Pages (free),
-DNS on Cloudflare, domain at Namecheap. Decap CMS at `/admin` gives non-technical board
-members a visual editor whose saves are git commits.
+static output, no client-side framework, one CSS file. Hosted on GitHub Pages (free, public
+repo), built and deployed by one GitHub Actions workflow. Domain and DNS at Namecheap. No
+visual editor: changes are made in git, usually by the webmaster with an AI assistant.
 
 **Scale and stakes:** a few hundred visitors a month, content changes a few times a season.
 Optimize for *a volunteer can maintain this in 2036*, not for features. When in doubt, do
@@ -20,23 +20,31 @@ less.
 - **Static site, not a CMS-with-a-database.** The content is four pages and a season. A
   database is a thing that needs backups, updates, and someone who remembers the password.
   Git *is* the database here, and GitHub keeps it. See `docs/adr/0001-*.md`.
-- **Cloudflare Pages over Azure Static Web Apps.** Both are free and both were viable. Pages
-  won on *ownership*: DNS and hosting live in one board-owned account, so the handoff to the
-  next webmaster is two logins (GitHub org, Cloudflare) instead of three (plus an Azure
-  subscription with billing). The original webmaster knew Azure better and chose against
-  familiarity on purpose. If the board ever picks up Azure for other reasons, switching is
-  ~1 hour because the site lives in git, not in the host.
+- **GitHub Pages, not Cloudflare Pages or Azure.** Decided in two steps. ADR-0001 chose
+  Cloudflare over Azure on *ownership* (fewest board-held accounts; the original webmaster
+  knew Azure better and chose against familiarity on purpose). ADR-0002 then noticed
+  GitHub Pages had been missed: it needs no account beyond the GitHub org the site already
+  requires, and DNS stays at Namecheap, so nameservers never move and the domain's
+  Namecheap email forwarding keeps working. Free only because the repo is **public** — a
+  paid plan was ruled out. Switching hosts is ~1 hour because the site lives in git.
+- **No visual editor** (ADR-0002). Decap CMS was scaffolded and removed before launch:
+  changes arrive by email and the webmaster makes them in git. The non-technical fallback is
+  GitHub's web editor (README, "Editing the site without technical tools"). Revisit if a
+  non-git person starts making regular changes.
 - **The season is one data file** (`src/data/season.json`), not four HTML pages. "Update
-  the program" is the single most common edit; it should touch one file, and the Decap form
-  for it should be obvious. Do not move concert data into page templates.
-- **Page copy is Markdown** (`src/content/pages/`) so Decap can offer a rich-text editor.
+  the program" is the single most common edit; it should touch one file, and be safe to
+  make in GitHub's web editor. Do not move concert data into page templates.
+- **Page copy is Markdown** (`src/content/pages/`) so it reads cleanly in a browser editor.
   Astro's content collection (`src/content.config.ts`) validates the frontmatter.
-- **`build.format: 'file'`** produces `/our-director.html`-style URLs to match the old Weebly
-  links people may have bookmarked. Keep it unless you also add redirects.
+- **Old Weebly URLs keep working.** `build.format: 'file'` produces `/our-director.html`-style
+  URLs; `contact-us.astro` is named after Weebly's page, and
+  `public/2026-27-concert-series.html` is a one-line redirect to `/concert-series.html`
+  (Weebly named the season page after the season). GitHub Pages has no server-side redirects,
+  so keep these unless you move hosts. Don't rename pages without leaving a redirect behind.
 - **No analytics** were carried over. The old site's Google Analytics tag was Universal
   Analytics (`UA-…`), which Google shut down in 2023; it had been collecting nothing for
-  years. If the board wants stats, add Cloudflare Web Analytics (free, no cookies) rather
-  than GA4.
+  years. If the board wants stats, add Cloudflare Web Analytics (free, no cookies, works on
+  any host) rather than GA4.
 - **The reminder sign-up form links out** (Google Form / Formspree) instead of being
   processed by the site. Static hosts don't process forms, and an orchestra that runs on a
   Gmail address is well served by a Google Form feeding a Sheet.
@@ -46,19 +54,20 @@ less.
 
 - `contact.jpg` is the *original-resolution* upload from Weebly (their `_orig` suffix); the
   smaller Weebly rendition was discarded.
-- `public/admin/config.yml` has a `TODO` for the repo name and a commented-out OAuth
-  `base_url`. Decap on Cloudflare Pages needs a tiny OAuth proxy (a Cloudflare Worker running
-  something like `decap-proxy`) because Pages doesn't host the GitHub OAuth handshake. Until
-  that's deployed, `/admin` won't sign in and edits happen in git directly. This is the one
-  piece of setup that isn't finished by scaffolding alone.
-- The CI workflow only *builds*; it does not deploy. Cloudflare Pages deploys from `main` on
-  its own. The workflow exists to fail a PR before a broken change reaches `main`.
+- The repository is named `chequamegonsymphony.github.io`. That is GitHub's convention for
+  the one repo served at the root of the org's Pages address, so root-relative links
+  (`/images/…`) work on the preview before the custom domain is attached. A repo named
+  anything else is served under a `/repo-name/` subpath and would need Astro's `base` set.
+- The one workflow (`.github/workflows/ci.yml`) both *checks* PRs and *deploys* `main`.
+  Nothing else publishes the site. Settings → Pages → Source must be "GitHub Actions".
+- Nav links are extensionless (`/our-director`) while the files are `.html`; GitHub Pages
+  resolves one to the other.
 
 ## Conventions
 
 - Keep it to one CSS file. If you feel the need for a framework, the site has grown past its
   purpose — stop and ask whether the board actually wants that.
-- Every image goes in `public/images/` with a descriptive filename. Decap uploads there too.
+- Every image goes in `public/images/` with a descriptive filename.
 - Dates in `season.json` are ISO (`YYYY-MM-DD`) for the `<time>` element *and* a
   `dateDisplay` string for humans, because "Saturday, November 7" is what a poster says.
 - Commit messages: plain English, present tense. "Update spring program." Nobody here needs
@@ -68,9 +77,10 @@ less.
 
 ## Accounts and ownership
 
-Board-owned: the GitHub organization, the Cloudflare account, the Namecheap registration.
-The webmaster is an admin, never the sole owner. MFA seeds and recovery codes live in the
-board's password manager. If you're reading this and the previous webmaster is unreachable,
+Board-owned: the CSO Gmail (`chequamegonsymphony@gmail.com`, the recovery address for
+everything else), the GitHub organization (owned by a CSO user account signed up with that
+Gmail), and the Namecheap registration and DNS. The webmaster is a second org owner, never
+the sole owner. MFA seeds and recovery codes live in the board's password manager. If you're reading this and the previous webmaster is unreachable,
 the README's "Accounts the CSO owns" section is the checklist, and *the domain renewal is the
 only thing that can actually be lost.*
 

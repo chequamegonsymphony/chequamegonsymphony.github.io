@@ -11,37 +11,48 @@ repository and asking "explain how this site works" is a legitimate way to get o
 
 | Piece | What it is | Where it lives |
 |---|---|---|
-| **Source** | This repository. Every change to the site is a commit here. | GitHub, in the CSO-owned organization |
-| **Builder** | [Astro](https://astro.build) turns the source into plain HTML. | Runs automatically on Cloudflare |
-| **Host** | [Cloudflare Pages](https://pages.cloudflare.com) serves the HTML. Free tier. | Cloudflare account owned by the CSO |
-| **Domain / DNS** | `chequamegonsymphony.org` is registered at Namecheap; its DNS is managed in Cloudflare. | Namecheap (registration), Cloudflare (DNS) |
-| **Editor** | [Decap CMS](https://decapcms.org) at `/admin` — a visual editor that saves to this repo. | Part of this site |
+| **Source** | This repository. Every change to the site is a commit here. | GitHub, in the CSO-owned `chequamegonsymphony` organization |
+| **Builder** | [Astro](https://astro.build) turns the source into plain HTML. | GitHub Actions (`.github/workflows/ci.yml`) |
+| **Host** | [GitHub Pages](https://pages.github.com) serves the HTML. Free for public repositories. | Same GitHub organization |
+| **Domain / DNS** | `chequamegonsymphony.org` is registered at Namecheap, and its DNS is managed there too. | Namecheap |
 
-**The flow:** someone edits (in `/admin` or by editing files here) → a commit lands on
-`main` → Cloudflare Pages notices, runs `npm run build`, and publishes the result. One to
-two minutes, no manual steps.
+**The flow:** a commit lands on `main` → the `build` workflow runs `npm run build` and
+publishes the result to GitHub Pages. One to two minutes, no manual steps.
 
-See `docs/adr/0001-static-site-hosting-platform.md` for *why* it's built this way.
+See `docs/adr/` for *why* it's built this way — ADR-0001 for the move off Weebly, ADR-0002
+for GitHub Pages and the decision not to run a visual editor. Known unfinished work is in
+`docs/follow-ups.md`.
 
-## Editing the site (no technical knowledge needed)
+## Editing the site without technical tools
 
-1. Go to `https://chequamegonsymphony.org/admin`
-2. Sign in with GitHub (you need to be a member of the CSO GitHub organization).
-3. Pick what to edit:
-   - **Concert Season** — dates, times, venue, and the program for each concert.
-   - **Pages** — the Home and Our Director text.
-   - **Site Details** — email, donation address, sponsor logos, the reminder sign-up link.
-4. Click **Publish**. The site updates within a couple of minutes.
+Most changes are the concert season. You need a GitHub account that is a member of the
+`chequamegonsymphony` organization.
 
-The concert-reminder sign-up form is a link to an external form (Google Form or similar).
-Change the link under **Site Details → Concert reminder sign-up**.
+1. On github.com, open this repository and go to `src/data/season.json`.
+2. Click the **pencil** (Edit this file).
+3. Change the text between the quotes. Keep the quotes, commas, and brackets as they are —
+   copying an existing concert and changing its words is the safest way to add one.
+   Dates appear twice on purpose: `date` is `YYYY-MM-DD` for computers, `dateDisplay` is
+   what a poster would say ("Saturday, November 7, 2026").
+4. Click **Commit changes**. The site updates within a couple of minutes.
+5. If something went wrong, the **Actions** tab shows a red ✗ with the error, and the live
+   site keeps the last good version. Undo by editing again.
+
+Other files you might edit the same way:
+
+- Contact email, donation address, sponsors, the reminder sign-up link: `src/data/site.json`
+- Home and Our Director text: `src/content/pages/*.md` (Markdown — plain text with `**bold**`
+  and `[links](https://…)`)
+
+The concert-reminder sign-up is a link to a Google Form owned by the CSO Gmail account;
+its responses land in a Google Sheet in that account's Drive.
 
 ## Editing the site (technical)
 
 ```bash
 npm install        # once
 npm run dev        # local preview at http://localhost:4321
-npm run build      # produce dist/ — what Cloudflare serves
+npm run build      # produce dist/ — what GitHub Pages serves
 ```
 
 - Season: `src/data/season.json`
@@ -55,28 +66,33 @@ Open a pull request; the `build` workflow checks it; merge to `main` to publish.
 
 ## Accounts the CSO owns (keep these in the board's password manager)
 
-- **GitHub organization** — owns this repository. At least two board members should be
-  *owners*; the webmaster is an *admin*.
-- **Cloudflare account** — DNS for the domain and the Pages project. Same rule: two owners.
-- **Namecheap** — the domain registration. Renew yearly (~$15). Do not let this lapse; it's
-  the only thing on this list that costs money and the only one that can be lost.
-- **MFA** for all three uses an authenticator (TOTP) whose *seed and recovery codes are
+- **CSO Gmail** (`chequamegonsymphony@gmail.com`) — the recovery address for everything
+  below. Whoever controls it controls the site. Its recovery phone and email must point at
+  current board members.
+- **GitHub** — a CSO user account (signed up with the CSO Gmail) that owns the
+  `chequamegonsymphony` organization. The webmaster's personal account is a second owner.
+  Never leave the organization with only one owner.
+- **Namecheap** — the domain registration and its DNS. Renew yearly (~$15). Do not let
+  this lapse; it's the only thing on this list that costs money and the only one that can
+  be lost.
+- **MFA** for all of these uses an authenticator (TOTP) whose *seed and recovery codes are
   stored in the password manager* — not on any one person's phone. That way the site
   survives any individual leaving.
 
 ## If something breaks
 
-- **Site is down / shows an old version:** check the Cloudflare Pages dashboard → Deployments.
-  A failed build shows its error there. Fix the file it names, commit, it redeploys.
-- **Domain doesn't resolve:** Cloudflare DNS → confirm the `CNAME` for `@` and `www` point to
-  the Pages project. Confirm Namecheap still lists Cloudflare's nameservers. Confirm the
-  domain hasn't expired.
-- **`/admin` won't sign in:** the GitHub OAuth proxy (see `public/admin/config.yml`) may need
-  its secret rotated, or the editor isn't in the GitHub organization.
+- **Site shows an old version:** check the repository's **Actions** tab. A failed build
+  shows its error there. Fix the file it names, commit, it redeploys.
+- **Domain doesn't resolve:** in Namecheap → Advanced DNS, the `@` host needs four `A`
+  records (`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`) and
+  `www` needs a `CNAME` to `chequamegonsymphony.github.io`. In the repository, Settings →
+  Pages → Custom domain should read `chequamegonsymphony.org`. Confirm the domain hasn't
+  expired.
 - **You have no idea:** the whole site is in this repository. Anyone who can run
   `npm run build` can host it anywhere. Nothing is locked in.
 
 ## History
 
 - 2012–2026: Weebly. Square acquired Weebly and began charging to map the root domain.
-- 2026-09: rebuilt as this repository. Content ported from the Weebly site; see ADR-0001.
+- 2026-09: rebuilt as this repository. Content ported from the Weebly site; see ADR-0001
+  and ADR-0002.

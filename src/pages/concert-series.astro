@@ -9,13 +9,14 @@ import season from '../data/season.json';
   <figure class="hero">
     <img src="/images/cellist-northland.jpg" alt="A cellist performing with the Chequamegon Symphony Orchestra" width="1200" height="400" />
   </figure>
-  <h1>{season.seasonTitle}{season.seasonTheme && <> — <em>{season.seasonTheme}</em></>}</h1>
+  <h1 class="season-title">{season.seasonTitle}{season.seasonTheme && <> — <em>{season.seasonTheme}</em></>}</h1>
 
   {season.concerts.map((c) => (
     <article class="concert">
-      <h2>{c.name}: {c.title}</h2>
+      <h2>{c.name}</h2>
       <p class="when"><time datetime={c.date}>{c.dateDisplay}</time>, {c.time}</p>
       <p class="venue">{c.venue}</p>
+      <h3>{c.title}</h3>
       <ul class="program">
         {c.program.map((p) => (
           <li><span class="work">{p.work}</span><span class="composer">{p.composer}</span></li>

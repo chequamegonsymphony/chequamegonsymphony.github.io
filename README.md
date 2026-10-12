@@ -45,7 +45,9 @@ Other files you might edit the same way:
   and `[links](https://…)`)
 
 The concert-reminder sign-up is a link to a Google Form owned by the CSO Gmail account;
-its responses land in a Google Sheet in that account's Drive.
+its responses land in a Google Sheet in that account's Drive. Put the form's link in
+`src/data/site.json` → `reminderForm.url`. If that link is empty (`""`), the Contact page
+says the form is on its way and asks people to email instead.
 
 ## Editing the site (technical)
 

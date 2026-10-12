@@ -11,7 +11,7 @@
   },
   "reminderForm": {
     "intro": "If you would like to receive email reminders of our concerts, please sign up here.",
-    "url": "TODO-replace-with-Google-Form-or-Formspree-URL",
+    "url": "",
     "buttonText": "Sign up for concert reminders"
   },
   "sponsors": [

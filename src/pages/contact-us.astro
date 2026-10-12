@@ -17,8 +17,14 @@ import site from '../data/site.json';
       </address>
 
       <h2>Concert reminders</h2>
-      <p>{site.reminderForm.intro}</p>
-      <p><a class="button" href={site.reminderForm.url} rel="noopener">{site.reminderForm.buttonText}</a></p>
+      {site.reminderForm.url
+        ? <>
+            <p>{site.reminderForm.intro}</p>
+            <p><a class="button" href={site.reminderForm.url} rel="noopener">{site.reminderForm.buttonText}</a></p>
+          </>
+        : <p>Our concert-reminder sign-up form is on its way. In the meantime, email
+            <a href={`mailto:${site.email}?subject=${encodeURIComponent('Please add me to the concert reminder list')}`}>{site.email}</a>
+            and we'll add you to the list.</p>}
     </div>
     <figure>
       <img src="/images/contact.jpg" alt="Chequamegon Symphony Orchestra" loading="lazy" />

@@ -8,7 +8,9 @@ turns into a real decision, record it as the next ADR in `docs/adr/`.
 
 - [ ] **Reminder sign-up form.** Create a Google Form from the CSO Gmail, link it to a Sheet,
   paste the exported Weebly submissions in as the first rows, and put the form's URL in
-  `src/data/site.json` → `reminderForm.url`. *Why:* static hosts don't process forms; the
+  `src/data/site.json` → `reminderForm.url`. **Until then** that link is empty and the Contact
+  page asks people to email the CSO Gmail to join the list (subject line "Please add me to the
+  concert reminder list") — add those senders to the Sheet too. *Why:* static hosts don't process forms; the
   Sheet is the replacement for Weebly's "Form Submission Reports." The Weebly list had bot
   sign-ups mixed in — expect some on the Google Form too.
 - [ ] **Check the Weebly editor for anything not published.** Hidden or draft pages, a blog,
@@ -38,8 +40,8 @@ turns into a real decision, record it as the next ADR in `docs/adr/`.
 
 - [ ] **Past seasons.** Wayback Machine copies of every season page from 2014–15 through
   2025–26 (plus Spring 2022 and the 2014 home page) were saved outside this repository,
-  along with four photos not on the current site (a group press photo, a horn-section
-  rehearsal, a 2024 performance banner, an old violin banner). Decide whether the site
+  along with three photos not on the current site (a group press photo, a 2024 performance
+  banner, an old violin banner). Decide whether the site
   should have a "Past Seasons" page. *Why:* the old site deleted each season when the next
   began; this is the orchestra's program history, and the archive is its only copy.
 

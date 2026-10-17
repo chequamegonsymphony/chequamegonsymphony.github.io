@@ -45,6 +45,11 @@ turns into a real decision, record it as the next ADR in `docs/adr/`.
   should have a "Past Seasons" page. *Why:* the old site deleted each season when the next
   began; this is the orchestra's program history, and the archive is its only copy.
 
+- [ ] **Sponsor list.** The site shows Wisconsin Public Radio, Northern State Bank, and
+  Ringenberg (WPR confirmed 2026-10-17). The board says there are more; an official list is
+  coming. Add each to `src/data/site.json` → `sponsors` with its logo in `public/images/`.
+  *Why:* a sponsor missing from the site is a thank-you not given.
+
 ## Housekeeping
 
 - [ ] **Namecheap email forwarding.** The domain has Namecheap mail forwarding (MX records to

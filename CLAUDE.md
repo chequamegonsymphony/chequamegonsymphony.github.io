@@ -87,9 +87,11 @@ only thing that can actually be lost.*
 ## History
 
 Rebuilt in September 2026 from the Weebly site by Adam Zeuske (webmaster) with Claude, after
-Square began charging for root-domain mapping. Content was ported verbatim from the live
-Weebly pages; images were pulled at original resolution from Weebly's `/uploads/` paths.
-The old site's "Peter and the Wold" typo was fixed in passing.
+Square began charging for root-domain mapping. Content was ported from the live Weebly pages
+with minor corrections: "Peter and the Wold" → "Wolf", composers' diacritics restored ("Béla
+Bartók"), dates written out in full, and the arranger's full name ("arr. Jerry Brubaker",
+confirmed by the board). Images were pulled at original resolution from Weebly's `/uploads/`
+paths.
 
 *The best maintenance instruction for this site is the one Rose French put in a horn method
 book: don't proceed to the next thing until you're comfortable with the current one.*
